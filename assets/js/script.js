@@ -1,3 +1,4 @@
+
 //Amadeus API
 //curl -X GET 'https://test.api.amadeus.com/v1/shopping/flight-destinations?origin=PAR&maxPrice=200' -H 'Authorization: Bearer {{token}}'
 let amadeusAPI = "zDja0gkGTDEEGjKOOGoGFU1ayCLA4HC6"
@@ -87,3 +88,4 @@ let app = {
         console.log(travelData); //Incoming Data
     }
 };
+
