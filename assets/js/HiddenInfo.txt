@@ -1,0 +1,24 @@
+- https://apilayer.com/account
+- OIcMcHi6isYEUys1SbJ7MAtEOgI1151B
+
+- https://aviationstack.com/dashboard
+- d04265cd0a78e12162b07fa5e135a390
+
+-https://developers.amadeus.com/
+-API= zDja0gkGTDEEGjKOOGoGFU1ayCLA4HC6
+-APIsecret= ao5dBkMQVwAKmhPr
+-AccessToken= qVn3kY6aWl3wqMBkiIUNP7ZiruvN
+
+-HTML Geolocation API - W3 School
+        {
+            "type": "amadeusOAuth2Token",
+            "username": "dennis.ah.littlefield@gmail.com",
+            "application_name": "flytcheckr",
+            "client_id": " zDja0gkGTDEEGjKOOGoGFU1ayCLA4HC6",
+            "token_type": "Bearer",
+            "access_token": "qVn3kY6aWl3wqMBkiIUNP7ZiruvN",
+            "expires_in": 1799,
+            "state": "approved",
+            "scope": ""
+        }
+curl -X GET 'https://test.api.amadeus.com/v1/shopping/flight-destinations?origin=PAR&maxPrice=200' -H 'Authorization: Bearer {{token}}'
