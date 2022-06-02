@@ -8,6 +8,7 @@ let amadeusSecretTEST = "ao5dBkMQVwAKmhPr"
 let amadeusTokenTEST = "qVn3kY6aWl3wqMBkiIUNP7ZiruvN"
 
 //Variables
+
 const inputOrigin = document.getElementById('input-origin').value;
 const inputDestination = document.getElementById('input-destination').value;
 const btnSearch = document.getElementById("button-locateMe");
@@ -15,6 +16,9 @@ const btnFastGetaway = document.getElementById("button-fastGetaway");
 const btnSubmit = document.getElementById("button-submit");
 //START APP
 let app = {
+
+
+
 
     init: () => {
 
@@ -55,6 +59,12 @@ function checkFlag() {
 checkFlag();
         //Show Users Longitude/Latitude
         
+
+
+
+
+//Get Nearest Airport
+//get current Longitude/Latitude and set closest airport
 
 
 
