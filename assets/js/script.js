@@ -6,14 +6,15 @@ let amadeusSecret = "ao5dBkMQVwAKmhPr"
 let amadeusToken = "qVn3kY6aWl3wqMBkiIUNP7ZiruvN"
 
 //Variables
-let originCity = document.getElementById('originCity').value;
-let destinationCity = document.getElementById('destinationCity').value;
-let coordLon = document.getElementById('coordLon').value;
-let coordLat = document.getElementById('coordLat').value;
+//let originCity = document.getElementById('originCity').value;
+//let destinationCity = document.getElementById('destinationCity').value;
+//let coordLon = document.getElementById('coordLon').value;
+//let coordLat = document.getElementById('coordLat').value;
 
 //GeoLocate
 // Turn longitude Latitude into IATA Code
 // Turn City Name into IATA CODE
+
 
 
 
