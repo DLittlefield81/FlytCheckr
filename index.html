@@ -20,8 +20,16 @@
 
 
         <form class="form-inline ">
-            <input id="input-origin" class="form-control mr-sm-2 demo" type="search" placeholder="Origin" aria-label="Search">
-            <button id="btn-locate" class="btn btn-outline-success my-2 my-sm-0 text-light" type="submit">Locate Me</button>
+            
+            <!-- Insert container for Inputbox with dropdown -->
+            <input id="input-origin" class="form-control mr-sm-2 demo" list="nearest-airports" placeholder="Origin" aria-label="Origin" name="Origin" /></label>
+            <datalist id="nearest-airports">
+                <option value="TEST HARD CODED DATA">
+             
+            </datalist>
+
+
+            <button id="button-locate" class="btn btn-outline-success my-2 my-sm-0 text-light" type="submit">Locate Me</button>
         </form>
 
         <form class="form-inline ">
@@ -30,12 +38,12 @@
         </form>
 
         <form class="form-inline text-light">
-            <input id="input-date" class="form-control mr-sm-2" type="search" placeholder="Date" aria-label="Search">
-            <button id="btn-getaway" class="btn btn-outline-success my-2 my-sm-0 text-light" type="submit">FastGetaway</button>
+            <input id="input-date" class="form-control mr-sm-2" type="date" placeholder="Date" aria-label="Search">
+            <button id="button-getaway" class="btn btn-outline-success my-2 my-sm-0 text-light" type="submit">FastGetaway</button>
 
         </form>
 
-        <button id="btn-submit" class="btn btn-outline-success my-2 my-sm-0 text-light" type="submit">Submit</button>
+        <button id="button-submit" class="btn btn-outline-success my-2 my-sm-0 text-light" type="submit">Submit</button>
     </nav>
 
     <div class="table-container ">
