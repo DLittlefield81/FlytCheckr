@@ -9,12 +9,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&family=Permanent+Marker&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
     <link href="./assets/css/style.css" rel="stylesheet">
     <title>FlytCheckr</title>
 </head>
 
 <body>
-    <nav class="navbar navbar-light bg-dark justify-content-right text-light">
+    <nav class="navbar navbar-light bg-dark text-light justify-content-right ">
         <a class="navbar-brand d-flex p-2 flytTitle">FlytCheckr</a>
 
 
@@ -27,7 +28,7 @@
                 <option value="TEST HARD CODED DATA">
             </datalist>
 
-            <button id="button-locate" class="btn btn-outline-success my-2 my-sm-0 text-light" type="button">Locate Me</button>
+            <button id="button-locate" class="btn btn-outline-success my-2 my-sm-0 " type="button">Locate Me</button>
 
         </div>
 
@@ -37,17 +38,21 @@
 
         </div>
 
-        <div class="form-inline text-light">
+        <div class="form-inline ">
 
             <input id="input-date" class="form-control mr-sm-2" type="date" placeholder="Date" aria-label="Search">
             
-            <button id="button-getaway" class="btn btn-outline-success my-2 my-sm-0 text-light" type="button">FastGetaway</button>
+            <button id="button-getaway" class="btn btn-outline-success my-2 my-sm-0 " type="button">FastGetaway</button>
 
         </div>
 
-        <button id="button-submit" class="btn btn-outline-success my-2 my-sm-0 text-light" type="submit">Submit</button>
+        <button id="button-submit" class="btn btn-outline-success my-2 my-sm-0 " type="submit">Submit</button>
 
     </nav>
+
+    <div>
+        <button type="button" value="darkMode" id="modeBtn" > <i class="fas fa-toggle-on"></i> </button>
+    </div>
 
 
 
@@ -56,15 +61,15 @@
 
 
     <div class="table-container ">
-        <table class="table has-background-dark has-text-white">
+        <table class="table has-background-dark has-text-light">
             <thead >
             <tr>
-                <th class="has-text-white">Carrier</th>
-                <th class="has-text-white">Departure Time</th>
-                <th class="has-text-white">Arrival Time</th>
-                <th class="has-text-white">Duration</th>
-                <th class="has-text-white">Price</th>
-                <th class="has-text-white">Link to book</th>
+                <th class="has-text-light">Carrier</th>
+                <th class="has-text-light">Departure Time</th>
+                <th class="has-text-light">Arrival Time</th>
+                <th class="has-text-light">Duration</th>
+                <th class="has-text-light">Price</th>
+                <th class="has-text-light">Link to book</th>
             </tr>
             </thead>
             <tr>
