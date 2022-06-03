@@ -1,7 +1,3 @@
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,53 +6,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&family=Permanent+Marker&display=swap" rel="stylesheet">
     <link href="./assets/css/style.css" rel="stylesheet">
     <title>FlytCheckr</title>
 </head>
 
 <body>
     <nav class="navbar navbar-light bg-dark justify-content-right text-light">
-        <a class="navbar-brand d-flex p-2">FlytCheckr</a>
+        <a class="navbar-brand d-flex p-2 flytTitle">FlytCheckr</a>
 
 
-        <form class="form-inline ">
+        <div class="form-inline ">
             
             <!-- Insert container for Inputbox with dropdown -->
-            <input id="input-origin" class="form-control mr-sm-2 demo" list="nearest-airports" placeholder="Origin" aria-label="Origin" name="Origin" /></label>
+            <input id="input-origin" class="form-control mr-sm-2 demo" list="nearest-airports" placeholder="Origin" aria-label="Origin" name="Origin" required></label>
+
             <datalist id="nearest-airports">
                 <option value="TEST HARD CODED DATA">
-             
             </datalist>
 
+            <button id="button-locate" class="btn btn-outline-success my-2 my-sm-0 text-light" type="button">Locate Me</button>
 
-            <button id="button-locate" class="btn btn-outline-success my-2 my-sm-0 text-light" type="submit">Locate Me</button>
-        </form>
+        </div>
 
-        <form class="form-inline ">
-            <input id="input-destination" class="form-control mr-sm-2" type="search" placeholder="Destination" aria-label="Search">
-            
-        </form>
+        <div class="form-inline ">
 
-        <form class="form-inline text-light">
+            <input id="input-destination" class="form-control mr-sm-2" type="search" placeholder="Destination" aria-label="Search" required>
+
+        </div>
+
+        <div class="form-inline text-light">
+
             <input id="input-date" class="form-control mr-sm-2" type="date" placeholder="Date" aria-label="Search">
-            <button id="button-getaway" class="btn btn-outline-success my-2 my-sm-0 text-light" type="submit">FastGetaway</button>
+            
+            <button id="button-getaway" class="btn btn-outline-success my-2 my-sm-0 text-light" type="button">FastGetaway</button>
 
-        </form>
+        </div>
 
         <button id="button-submit" class="btn btn-outline-success my-2 my-sm-0 text-light" type="submit">Submit</button>
+
     </nav>
+
+
+
+    <br><br><br>
+
+
 
     <div class="table-container ">
         <table class="table has-background-dark has-text-white">
             <thead >
             <tr>
-                <th class="has-text-white">Destination</th>
+                <th class="has-text-white">Carrier</th>
+                <th class="has-text-white">Departure Time</th>
+                <th class="has-text-white">Arrival Time</th>
+                <th class="has-text-white">Duration</th>
                 <th class="has-text-white">Price</th>
-                <th class="has-text-white">Flight Duration</th>
-                <th class="has-text-white">Book Here</th>
+                <th class="has-text-white">Link to book</th>
             </tr>
             </thead>
             <tr>
+                <td>test</td>
+                <td>test</td>
                 <td>test</td>
                 <td>test</td>
                 <td>test</td>
