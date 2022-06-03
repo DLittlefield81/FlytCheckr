@@ -6,7 +6,7 @@ let amadeusAPITEST = "zDja0gkGTDEEGjKOOGoGFU1ayCLA4HC6"
 let amadeusSecretTEST = "ao5dBkMQVwAKmhPr"
 //TOKEN
 //TOKENS EXPIRE AFTER 30MINS IN TEST ENVIRONMENT
-let amadeusTokenTEST = "mJLivhSDVIxhPRVopAMwJJGJgPIR"
+let amadeusTokenTEST = "A1ZF9vVYSQJ8NfJljC5V0kJKSyNV"
 
 //VARIABLBLES
 const inputOrigin = document.getElementById('input-origin').value;
