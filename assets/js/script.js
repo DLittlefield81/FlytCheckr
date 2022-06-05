@@ -1,22 +1,18 @@
-//PRODUCTION KEYS
-let amadeusAPIPRO = "Yz40XpPPF1A6wBmSyKGXFZ14APg8YzKn"
-let amadeusSecretPRO = "epwYQi2IySzrzYpv"
-//TEST KEYS
-let amadeusAPITEST = "zDja0gkGTDEEGjKOOGoGFU1ayCLA4HC6"
-let amadeusSecretTEST = "ao5dBkMQVwAKmhPr"
 //TOKEN
 //TOKENS EXPIRE AFTER 30MINS IN TEST ENVIRONMENT
-let amadeusTokenTEST = "tili7hiSLs61RRRoIw5GKsueUaWi"
+let amadeusTokenTEST = "U7faCXTy2HRjzETCT9o770aXlvwl"
 
 //VARIABLBLES
 let startLocation = "";
-const inputOrigin = document.getElementById('input-origin').value;
-const inputDestination = document.getElementById('input-destination').value;
+const inputLookup = document.getElementById('input-lookup').value;
 const btnSearch = document.getElementById("button-locate");
-const buildOriginList = document.getElementById("nearest-airports");
-const buildDestinationList = document.getElementById("destination-airports");
+const containerLookup = document.getElementById("container-lookup");
+const containerOrigin = document.getElementById("container-origin");
+const containerDestination = document.getElementById("container-destination");
+const modalWindowContent = document.getElementById("modal-content");
+const notificationTitle = document.getElementById("notification-title");
 const notificationMessage = document.getElementById("notification-message");
-//const btnFastGetaway = document.getElementById("button-getaway");
+const btnClearHistory = document.getElementById("button-clearhistory");
 const btnSubmit = document.getElementById("button-submit");
 
 
@@ -30,109 +26,157 @@ let app = {
         let inputDate = moment().format('YYYY-MM-DD');
         document.getElementById("input-date").value = inputDate
 
+        //Check for LocalStorage Item
+        if (localStorage.getItem("startLocation") === null) {
+            console.log("Item does not exist in localstoarge");
 
-        //BUTTON LISTENERS
-        btnSearch.addEventListener('click', app.getUserLocation);
-        btnSubmit.addEventListener('click', app.getUserByCity);
-        //btnFastGetaway.addEventListener('click', app.fastGetaway);
+        } else {
+            console.log("Item exists in localstorage");
+            document.getElementById('input-lookup').value = localStorage.getItem('startLocation');
+            app.standardLookup();
+        }
+        //LISTENERS
+        document.getElementById("input-lookup").addEventListener("focusout", app.standardLookup);
+        document.getElementById("input-lookup").addEventListener("keypress", function (event) {
+            
+            if (event.key === "Enter") {
+               app.standardLookup();
+            }
+        });
+        
+
+        btnSearch.addEventListener('click', app.fetchCoords);
+        btnSubmit.addEventListener('click', app.populateGrid);
+        btnClearHistory.addEventListener('click', app.clearHistory);
 
 
     },
 
-    getUserLocation: (event) => {
-        console.log("Starting getUserLocation function ");
-        event.preventDefault();
+    standardLookup: () => {
+        console.log("Starting Standard Lookup")
+        // on loseFocus retrieves a list of airports matching search name
+        let inputLookup = document.getElementById('input-lookup').value
 
-        if (localStorage.getItem('startLocation') !== null) {
-            //Ask to use previous coords and retrieve from LocalStorage
-            console.log("Using Existing Local Storage");
-            startLocation = localStorage.getItem('startLocation');
-            getNearestAirports()
+        let lookupURL = `https://test.api.amadeus.com/v1/reference-data/locations?subType=AIRPORT,CITY&keyword=${inputLookup}&page%5Blimit%5D=10&page%5Boffset%5D=0&sort=analytics.travelers.score&view=FULL`;
+        console.log(lookupURL);
+        fetch(lookupURL, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + amadeusTokenTEST,
+            }
+        })
+            .then(resp => {
+                if (!resp.ok) throw new Error(resp.statusText);
+                return resp.json();
+            })
+            .then(data => {
+                createLookupList(data);
+            })
+            .catch(console.err);
+        function createLookupList(lookupData) {
+            console.log("Creating dropdown list of Nearest Origin Airports");
+            console.log(lookupData);
+            containerOrigin.innerHTML = ""; //gets rid of input box to create dropdown list
+            //create Select Dropdown
+            const selectboxLookup = document.createElement("select");
+            selectboxLookup.setAttribute("id", "select-origin");
+            selectboxLookup.setAttribute("placeholder", "Select Airport");
+            selectboxLookup.setAttribute("class", "form-control mr-sm-2 demo");
+            selectboxLookup.setAttribute("onclick", "app.populateDestinations()");
+            const lookupOption = document.createElement("OPTION");
+            lookupOption.innerHTML = "Select Nearby Airport";
+            lookupOption.setAttribute("hidden", "true");
+            lookupOption.setAttribute("disabled", "disabled");
+            selectboxLookup.appendChild(lookupOption);
+            containerOrigin.appendChild(selectboxLookup);
+            //create origin airport options
+            for (let i = 0; i < lookupData.data.length; i++) {
+                const lookupOption = document.createElement("OPTION");
+                lookupOption.setAttribute("value", lookupData.data[i].iataCode);
+                lookupOption.innerHTML = "[" + lookupData.data[i].iataCode + "] " + lookupData.data[i].name;
+                selectboxLookup.appendChild(lookupOption);
+            }
+        }
+    },
+
+    fetchCoords: () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(setCoordinatesToStorage);
+            function setCoordinatesToStorage(position) {
+                lat = position.coords.latitude;
+                lon = position.coords.longitude;
+                console.log(lat, lon);
+                startLocation = `latitude=${lat}&longitude=${lon}`
+
+                app.nearestAirport()
+            }
         } else {
-            //does Fetch for coords
-            console.log(`Fetching Coordinates`);
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(setCoordinatesToStorage);
-                function setCoordinatesToStorage(position) {
-                    lat = position.coords.latitude;
-                    lon = position.coords.longitude;
-                    console.log(lat, lon);
-                    startLocation = `latitude=${lat}&longitude=${lon}`
-                    localStorage.setItem('startLocation', startLocation);
-                    getNearestAirports()
-                }
-
-            } else {
-                //x.innerHTML = "Geolocation is not supported by this browser.";
-                app.init();
-            }
+            //x.innerHTML = "Geolocation is not supported by this browser.";
+            app.init();
         }
-        function getNearestAirports() {
-            console.log("getting nearest airports data");
-            //check if coordinates are stored to localstorage
-            console.log(startLocation);
+    },
 
-
-            //Get city from latitude and longitude
-
-            let originsURL = `https://test.api.amadeus.com/v1/reference-data/locations/airports?${startLocation}&radius=500&page%5Blimit%5D=10&page%5Boffset%5D=0&sort=distance`;
-            console.log(originsURL);
-            fetch(originsURL, {
-                method: 'GET',
-                headers: {
-                    'Authorization': 'Bearer ' + amadeusTokenTEST,
-                }
+    nearestAirport: () => {
+        console.log("Starting nearest airport function");
+        console.log(startLocation);
+        //Get city from latitude and longitude
+        console.log("getting nearest airports data");
+        let originsURL = `https://test.api.amadeus.com/v1/reference-data/locations/airports?${startLocation}&radius=500&page%5Blimit%5D=10&page%5Boffset%5D=0&sort=distance`;
+        console.log(originsURL);
+        fetch(originsURL, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + amadeusTokenTEST,
             }
-            )
-                .then(resp => {
-                    if (!resp.ok) throw new Error(resp.statusText);
-                    return resp.json();
-                })
-                .then(data => {
-                    createOriginList(data);
-                })
-                .catch(console.err);
-        }
+        })
+            .then(resp => {
+                if (!resp.ok) throw new Error(resp.statusText);
+                return resp.json();
+            })
+            .then(data => {
+                createOriginList(data);
+            })
+            .catch(console.err);
+
         function createOriginList(originsData) {
             console.log("Creating dropdown list of Nearest Origin Airports");
             console.log(originsData);
-            app.populateDestinations();
-            console.log("I am here")
-            buildOriginList.innerHTML = "";
-            document.getElementById('input-origin').placeholder = "Select From List";
+            containerOrigin.innerHTML = ""; //gets rid of input box to create dropdown list
+            //create Select Dropdown
+            const selectboxOrigin = document.createElement("select");
+            selectboxOrigin.setAttribute("id", "select-origin");
+            selectboxOrigin.setAttribute("placeholder", "Select Airport");
+            selectboxOrigin.setAttribute("class", "form-control mr-sm-2 demo");
+            selectboxOrigin.setAttribute("onfocusout", "app.populateDestinations()");
+            const originOption = document.createElement("OPTION");
+            originOption.innerHTML = "Select Nearby Airport";
+            originOption.setAttribute("hidden", "true");
+            originOption.setAttribute("disabled", "disabled");
+            selectboxOrigin.appendChild(originOption);
+            containerOrigin.appendChild(selectboxOrigin);
+            //create origin airport options
             for (let i = 0; i < originsData.data.length; i++) {
-
-
-                //Build list of origin cities
                 const originOption = document.createElement("OPTION");
-                originOption.setAttribute("value", originsData.data[i].name);
-                buildOriginList.appendChild(originOption);
+                originOption.setAttribute("value", originsData.data[i].iataCode);
+                originOption.innerHTML = "[" + originsData.data[i].iataCode + "] " + originsData.data[i].name;
+                selectboxOrigin.appendChild(originOption);
             }
         }
     },
 
     populateDestinations: () => {
         console.log("Starting populateDestinations Function");
-        let IATAcode = "YYZ" //document.getElementById("origin-airports").value
-        // if (typeof IATAcode !== "undefined") {
-
-        //     getDestinationAirports() ;
-
-        // } else {
-        //     //x.innerHTML = "Geolocation is not supported by this browser.";
-        // }
-
-
+        //Set Selected Origin to LocalStorage
+        let IATAcode = document.getElementById("select-origin").value;
+        localStorage.setItem('startLocation', IATAcode);
         //Get city from latitude and longitude
         let destinationsURL = `https://test.api.amadeus.com/v1/airport/direct-destinations?departureAirportCode=${IATAcode}`;
-
         fetch(destinationsURL, {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + amadeusTokenTEST,
             }
-        }
-        )
+        })
             .then(resp => {
                 if (!resp.ok) throw new Error(resp.statusText);
                 return resp.json();
@@ -143,127 +187,166 @@ let app = {
             .catch(console.err);
 
         function createDestinationList(destinationData) {
-            console.log("Creating dropdown list of Serviced Destination Airports");
+            console.log("Creating dropdown list of Serviced Destinations");
             console.log(destinationData);
+            containerDestination.innerHTML = ""; //gets rid of input box to create dropdown list
+            //create Select Dropdown
+            const selectboxDestination = document.createElement("select");
+            selectboxDestination.setAttribute("id", "select-destinationAirports");
+            selectboxDestination.setAttribute("placeholder", "Select Destination");
+            selectboxDestination.setAttribute("class", "form-control mr-sm-2 demo");
+            const destinationOption = document.createElement("OPTION");
+            destinationOption.innerHTML = "Select Destination";
+            destinationOption.setAttribute("hidden", "true");
+            destinationOption.setAttribute("disabled", "disabled");
+            selectboxDestination.appendChild(destinationOption);
+            containerDestination.appendChild(selectboxDestination);
+            //create origin airport options
 
-            buildDestinationList.innerHTML = "";
-            document.getElementById('input-destination').placeholder = "Select From List";
-            for (let i = 0; i < destinationData.data.length; i++) {
+            if (destinationData.data.length != 0) {
+                for (let i = 0; i < destinationData.data.length; i++) {
+                    const destinationOption = document.createElement("OPTION");
+                    destinationOption.setAttribute("value", destinationData.data[i].iataCode);
+                    destinationOption.innerHTML = "[" + destinationData.data[i].iataCode + "] " + destinationData.data[i].name;
+                    selectboxDestination.appendChild(destinationOption);
+                }
+            } else {
+                destinationOption.innerHTML = "No Destinations Available";
 
-
-                //Build list of origin cities
-                const destinationOption = document.createElement("OPTION");
-                destinationOption.setAttribute("value", destinationData.data[i].name);
-                buildDestinationList.appendChild(destinationOption);
             }
         }
 
-
-
-
-
-
-
-
-
-
-
     },
 
-    originSelected: () => {
-        console.log("");
+    populateGrid: () => {
+        console.log("Starting PopulateGrid Function");
         //User enters city name, or selects from dropdown -- origin sets IATA Code -- IATA Code limits Destinations
-        let IATAcode = input.value
-        console.log(IATAcode);
+        //ORIGIN
+        let iataOrigin = document.getElementById("select-origin").value;
+        console.log(iataOrigin);
+        let iataDestination = document.getElementById("select-destinationAirports").value;
+        console.log(iataDestination);
+        let travelDate = document.getElementById("input-date").value;
+        console.log(travelDate);
+
+        //DESTINATION
+
+        let destinationsURL = `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${iataOrigin}&destinationLocationCode=${iataDestination}&departureDate=${travelDate}&adults=1&travelClass=ECONOMY&nonStop=true&max=250`;
+        fetch(destinationsURL, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + amadeusTokenTEST,
+            }
+        })
+            .then(resp => {
+                if (!resp.ok) throw new Error(resp.statusText);
+                return resp.json();
+            })
+            .then(data => {
+                console.log("Data Retrieved for Fare Matrix");
+                createFareMatrix(data);
+
+            })
+            .catch(console.err);
+
+
+        function createFareMatrix(fareMatrixData) {
+            console.log("Creating Fare Matrix");
+            console.log(fareMatrixData);
+
+            //Clear Table on New Search
+            if (document.getElementById('table-fareMatrix').rows.length > 1) {
+                for (let r = 1; r < document.getElementById('table-fareMatrix').rows.length; r++) {
+                    console.log("Clearing Existing Matrix");
+                    document.getElementById("table-fareMatrix").deleteRow(r);
+                }
+            }
+            //create Fare Matrix Table
+            for (let i = 0; i < fareMatrixData.data.length; i++) {
+                var table = document.getElementById("table-fareMatrix");
+                var row = table.insertRow();
+                var carrier = row.insertCell();
+                var timeDept = row.insertCell();
+                var timeArr = row.insertCell();
+                var timeTot = row.insertCell();
+                var price = row.insertCell();
+                var linkToBook = row.insertCell();
+                carrier.setAttribute("class", "text-white");
+                carrier.innerHTML = `<img src="https://daisycon.io/images/airline/?width=150&height=100&iata=${fareMatrixData.data[i].validatingAirlineCodes[0]}" alt="${fareMatrixData.data[i].validatingAirlineCodes[0]}">`;
+                timeDept.setAttribute("class", "text-white");
+                timeDept.innerHTML = fareMatrixData.data[i].itineraries[0].segments[0].departure.at.slice(0, 10) + "<br>" + fareMatrixData.data[i].itineraries[0].segments[0].departure.at.slice(11);
+                timeArr.setAttribute("class", "text-white");
+                timeArr.innerHTML = fareMatrixData.data[i].itineraries[0].segments[0].arrival.at.slice(0, 10) + "<br>" + fareMatrixData.data[i].itineraries[0].segments[0].arrival.at.slice(11);
+                timeTot.setAttribute("class", "text-white");
+                timeTot.innerHTML = fareMatrixData.data[i].itineraries[0].duration.slice(2);
+                price.setAttribute("class", "text-white");
+                price.innerHTML = fareMatrixData.data[i].price.total + "<br>";
+                linkToBook.setAttribute("class", "text-white");
+                linkToBook.innerHTML = ;
+            }
+
+            
+        }
+
     },
 
-    nearestAirport: () => {
-        console.log("");
-        //Get Nearest Airport
-        //get current Longitude/Latitude and set closest airport
 
+    convertCurrency: () => {
+        console.log("Currency Converter Started");
 
+        var myHeaders = new Headers();
+        myHeaders.append("apikey", "OIcMcHi6isYEUys1SbJ7MAtEOgI1151B");
 
+        var requestOptions = {
+            method: 'GET',
+            redirect: 'follow',
+            headers: myHeaders
+        };
 
-    },
-
-    fastGetaway: (event2) => {
-        console.log("");
-        event2.preventDefault();
-        //Set Fast Getaway
-        //Fast Getaway sets date to Today then checks for flights
-
-
-
-
-
-
-
+        fetch("https://api.apilayer.com/currency_data/convert?to={to}&from={from}&amount={amount}", requestOptions)
+            .then(response => response.text())
+            .then(result => console.log(result))
+            .catch(error => console.log('error', error));
 
     },
-    standardLookup: () => {
-        //user enters origin, dropdown populates with destination options
-        inputOrigin
-
-
+    clearHistory: () => {
+        console.log("Cleared Application LocalStorage");
+        localStorage.clear();
+        for (let y = 1; y < document.getElementById('table-fareMatrix').rows.length; y++) {
+            console.log(document.getElementById('table-fareMatrix').rows.length);
+            document.getElementById("table-fareMatrix").deleteRow(1);
+        }
     },
-    errorHandler: () => {
-        //user enters origin, dropdown populates with destination options
 
+    notificationMessageHandler: (messageType) => {
+
+        switch (messageType) {
+            case Message:
+                document.getElementById("notification-container").setAttribute("class", "alert alert-success alert-dismissible fade show");
+                document.getElementById("notification-container").setAttribute("role", "alert");
+                break;
+            case Alert:
+                document.getElementById("notification-container").setAttribute("class", "alert alert-danger alert-dismissible fade show");
+                document.getElementById("notification-container").setAttribute("role", "alert");
+                break;
+            case Error:
+                document.getElementById("notification-container").setAttribute("class", "alert alert-warning alert-dismissible fade show");
+                document.getElementById("notification-container").setAttribute("role", "alert");
+                break;
+        }
+
+
+        // <strong>Development Mode!</strong> Token Keys only active for 30 minutes.
+        // < button type = "button" class="close" data - dismiss="alert" aria - label="Close" >
+        //     <span aria-hidden="true">&times;</span>
+        // </ >
+        
+        
 
 
     }
 
 };
+
+
 app.init();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// let app = {
-//     init: () => {
-//         document
-//             .getElementById('btnSearch')
-//             .addEventListener('click', app.fetchFlights);
-//     },
-//     fetchFlights: () => {
-//         //        localStorage.setItem("search", JSON.stringify(searchHistory));
-//         let url = `https://test.api.amadeus.com/v1/airport/direct-destinations?departureAirportCode=${origin}&Bearer=${amadeusToken}`;
-//         console.log(url)
-//         fetch(url)
-//             method: Get
-//             .then(resp => {
-//                 if (!resp.ok) throw new Error(resp.statusText);
-//                 return resp.json();
-//             })
-//             .then(data => {
-//                 app.showTravelOptions(data);
-
-//             })
-//             .catch(console.err);
-//     },
-//     showTravelOptions: (travelData) => {
-
-//         console.log(travelData); //Incoming Data
-//     }
-// };
