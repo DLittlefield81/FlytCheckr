@@ -1,6 +1,6 @@
 //TOKEN
 //TOKENS EXPIRE AFTER 30MINS IN TEST ENVIRONMENT
-let amadeusTokenTEST = "U7faCXTy2HRjzETCT9o770aXlvwl"
+let amadeusTokenTEST = "1myn9L2tjIIBl2AcTBDRk7T3nKTZ"
 
 //VARIABLBLES
 let startLocation = "";

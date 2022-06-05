@@ -17,7 +17,7 @@ function convertCurrency() {
 
 }
 
-let amadeusTokenTEST = "fqAS09kIYoRWGE3jSMUoPS3ZGX97"
+let amadeusTokenTEST = "1myn9L2tjIIBl2AcTBDRk7T3nKTZ"
 
 function CarrierAirline() {
 
