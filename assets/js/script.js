@@ -1,6 +1,6 @@
 //TOKEN
 //TOKENS EXPIRE AFTER 30MINS IN TEST ENVIRONMENT
-let amadeusTokenTEST = "xgjuH2EN07XJQU691arcThdwjiQd"
+let amadeusTokenTEST = "gYAX6ZaSVZc6fMnMEJecxrSoou9S"
 
 //VARIABLBLES
 let carrierCode = "";
@@ -16,9 +16,6 @@ const notificationTitle = document.getElementById("notification-title");
 const notificationMessage = document.getElementById("notification-message");
 const btnClearHistory = document.getElementById("button-clearhistory");
 const btnSubmit = document.getElementById("button-submit");
-
-
-
 
 
 //START APP
@@ -70,6 +67,7 @@ let app = {
                 'Authorization': 'Bearer ' + amadeusTokenTEST,
             }
         })
+            
             .then(resp => {
                 if (!resp.ok) throw new Error(resp.statusText);
                 return resp.json();
@@ -313,10 +311,7 @@ let app = {
                 price.innerHTML = fareMatrixData.data[i].price.total + "<br>";
                 linkToBook.setAttribute("class", "text-white");
                 carrierAirline(fareMatrixData.data[i].validatingAirlineCodes[0], linkToBook);
-                // console.log("airlineBookingURL")
-                // console.log(airlineBookingURL)
-                // linkToBook.innerHTML = `<a href="https://${airlineBookingURL}.com" target="_blank"><button class="btn btn-outline-success my-2 my-sm-0 text-light">Book Ticket</button></a>`
-            }
+           }
     
 
         }
@@ -404,15 +399,11 @@ function modeSwitcher(){
     clearHistory: () => {
         console.log("Cleared Application LocalStorage");
         localStorage.clear();
-        let tableRows = document.getElementById('table-fareMatrix').rows.length;
-        for (let y = 1; y < document.getElementById('table-fareMatrix').rows.length; y++) {
-            console.log();
-            document.getElementById("table-fareMatrix").deleteRow(1);
-        }
+        location.reload();
     },
 
     notificationMessageHandler: (messageType) => {
-
+//Notification Message
         switch (messageType) {
             case Message:
                 document.getElementById("notification-container").setAttribute("class", "alert alert-success alert-dismissible fade show");
