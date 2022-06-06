@@ -17,7 +17,7 @@ Follow these steps to install this project on your local machine.
 Link to Deployed Application: https://
 
 
-![FytCheckr](assets/images/.png)
+![FytCheckr](assets/images/screenshot.png)
 ![Wireframe](assets/images/wireframe.png)
 
 
