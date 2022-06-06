@@ -3,7 +3,7 @@ body {
     min-height: 100vh;
     margin: auto;
     background-color: rgba(54, 54, 54, 255);
-    /* background-color: rgb(255, 255, 255); */
+    
 
 
 }
@@ -21,9 +21,7 @@ body {
     font-size: 20px;
 }
 
-#modeBtn:hover {
-    box-shadow: whitesmoke;
-}
+
 
 #btn-clearhistory {
     background-color: rgba(54, 54, 54, 255);

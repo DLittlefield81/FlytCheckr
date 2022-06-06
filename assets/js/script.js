@@ -347,47 +347,51 @@ let modeBtn = document.getElementById("modeBtn");
 
 modeBtn.addEventListener("click", modeSwitcher);
 
-function modeSwitcher(){
-    if (modeBtn.value === "darkMode") {
-        modeBtn.value = "lightMode";
-        document.querySelector("nav").classList.remove("bg-dark");
-        document.querySelector("nav").classList.add("bg-light");
-        document.querySelector("nav").classList.remove("text-light");
-        document.querySelector("nav").classList.add("text-dark");
+// function modeSwitcher(){
+//     if (modeBtn.value === "darkMode") {
+//         modeBtn.value = "lightMode";
+//         document.querySelector("nav").classList.remove("bg-dark");
+//         document.querySelector("nav").classList.add("bg-light");
+//         document.querySelector("nav").classList.remove("text-light");
+//         document.querySelector("nav").classList.add("text-dark");
 
-        document.querySelector("table").classList.remove("has-background-dark");
-        document.querySelector("table").classList.add("has-background-light");
-        document.querySelector("table").classList.remove("has-text-light");
-        document.querySelector("table").classList.add("has-text-dark");
+//         document.querySelector("table").classList.remove("has-background-dark");
+//         document.querySelector("table").classList.add("has-background-light");
+//         document.querySelector("table").classList.remove("has-text-light");
+//         document.querySelector("table").classList.add("has-text-dark");
 
-        document.querySelectorAll("th").forEach(element => element.classList.remove("has-text-light"));
-        document.querySelectorAll("th").forEach(element => element.classList.add("has-text-dark"));
+//         document.querySelectorAll("th").forEach(element => element.classList.remove("has-text-light"));
+//         document.querySelectorAll("th").forEach(element => element.classList.add("has-text-dark"));
 
-        document.body.style.backgroundColor = "white";
-        document.getElementById("modeBtn").style.backgroundColor = "white";
-        document.getElementById("btn-clearhistory").style.backgroundColor = "white";
+//         document.body.style.backgroundColor = "white";
+//         document.getElementById("modeBtn").style.backgroundColor = "white";
+//         document.getElementById("button-clearhistory").classList.remove("text-light");
+//         document.getElementById("button-clearhistory").classList.add("text-dark");
         
 
-    } else {
-        modeBtn.value = "darkMode";
-        document.querySelector("nav").classList.remove("bg-light");
-        document.querySelector("nav").classList.add("bg-dark");
-        document.querySelector("nav").classList.remove("text-dark");
-        document.querySelector("nav").classList.add("text-light");
+//     } else {
+//         modeBtn.value = "darkMode";
+//         document.querySelector("nav").classList.remove("bg-light");
+//         document.querySelector("nav").classList.add("bg-dark");
+//         document.querySelector("nav").classList.remove("text-dark");
+//         document.querySelector("nav").classList.add("text-light");
 
-        document.querySelector("table").classList.remove("has-background-light");
-        document.querySelector("table").classList.add("has-background-dark");
-        document.querySelector("table").classList.remove("has-text-dark");
-        document.querySelector("table").classList.add("has-text-light");
+//         document.querySelector("table").classList.remove("has-background-light");
+//         document.querySelector("table").classList.add("has-background-dark");
+//         document.querySelector("table").classList.remove("has-text-dark");
+//         document.querySelector("table").classList.add("has-text-light");
 
-        document.querySelectorAll("th").forEach(element => element.classList.remove("has-text-dark"));
-        document.querySelectorAll("th").forEach(element => element.classList.add("has-text-light"));
+//         document.querySelectorAll("th").forEach(element => element.classList.remove("has-text-dark"));
+//         document.querySelectorAll("th").forEach(element => element.classList.add("has-text-light"));
 
-        document.body.style.backgroundColor = "rgba(54,54,54,255)";
-        document.getElementById("modeBtn").style.backgroundColor = "rgba(54,54,54,255)";
-        document.getElementById("btn-clearhistory").style.backgroundColor = "rgba(54,54,54,255)";
+//         document.body.style.backgroundColor = "rgba(54,54,54,255)";
+//         document.getElementById("modeBtn").style.backgroundColor = "rgba(54,54,54,255)";
+//         document.getElementById("button-clearhistory").style.backgroundColor = "rgba(54,54,54,255)";
+//         document.getElementById("button-clearhistory").classList.remove("text-dark");
+//         document.getElementById("button-clearhistory").classList.add("text-light");
 
-}
+
+};
 }
 
 
@@ -447,6 +451,8 @@ function modeSwitcher(){
             document.body.style.backgroundColor = "white";
             document.getElementById("modeBtn").style.backgroundColor = "white";
             document.getElementById("button-clearhistory").style.backgroundColor = "white";
+            document.getElementById("button-clearhistory").classList.remove("text-light");
+            document.getElementById("button-clearhistory").classList.add("text-dark");
 
 
         } else {
@@ -467,6 +473,9 @@ function modeSwitcher(){
             document.body.style.backgroundColor = "rgba(54,54,54,255)";
             document.getElementById("modeBtn").style.backgroundColor = "rgba(54,54,54,255)";
             document.getElementById("button-clearhistory").style.backgroundColor = "rgba(54,54,54,255)";
+            document.getElementById("button-clearhistory").classList.remove("text-dark");
+            document.getElementById("button-clearhistory").classList.add("text-light");
+
 
         }
     }
