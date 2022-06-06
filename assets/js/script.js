@@ -1,9 +1,11 @@
 //TOKEN
 //TOKENS EXPIRE AFTER 30MINS IN TEST ENVIRONMENT
-let amadeusTokenTEST = "1myn9L2tjIIBl2AcTBDRk7T3nKTZ"
+let amadeusTokenTEST = "xgjuH2EN07XJQU691arcThdwjiQd"
 
 //VARIABLBLES
+let carrierCode = "";
 let startLocation = "";
+let airlineBookingURL = "DL BLANK TAG";
 const inputLookup = document.getElementById('input-lookup').value;
 const btnSearch = document.getElementById("button-locate");
 const containerLookup = document.getElementById("container-lookup");
@@ -232,6 +234,31 @@ let app = {
         let travelDate = document.getElementById("input-date").value;
         console.log(travelDate);
 
+        function carrierAirline(carrierCode, linkToBookEl) {
+            //let carrierCode = "F9"
+            const options = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Host': 'iata-and-icao-codes.p.rapidapi.com',
+                    'X-RapidAPI-Key': 'bf98be93bcmsh29c5cad60fcbe7cp1c13e7jsnffaac73a1ecd'
+                }
+            };
+        
+            fetch(`https://iata-and-icao-codes.p.rapidapi.com/airline?iata_code=${carrierCode}`, options)
+                .then(resp => {
+                    if (!resp.ok) throw new Error(resp.statusText);
+                    return resp.json();
+                })
+                .then(data => {
+                    console.log("Data Retrieved for Fare Matrix");
+                    airlineBookingURL = data[0].name.split(" ").join("");
+                    linkToBookEl.innerHTML = `<a href="https://${airlineBookingURL}.com" target="_blank"><button class="btn btn-outline-success my-2 my-sm-0 text-light">Book Ticket</button></a>`;
+                   
+        
+                })
+                .catch(console.err);
+            };
+
         //DESTINATION
 
         let destinationsURL = `https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=${iataOrigin}&destinationLocationCode=${iataDestination}&departureDate=${travelDate}&adults=1&travelClass=ECONOMY&nonStop=true&max=250`;
@@ -264,8 +291,8 @@ let app = {
                     document.getElementById("table-fareMatrix").deleteRow(r);
                 }
             }
-            //create Fare Matrix Table
             for (let i = 0; i < fareMatrixData.data.length; i++) {
+                
                 var table = document.getElementById("table-fareMatrix");
                 var row = table.insertRow();
                 var carrier = row.insertCell();
@@ -285,13 +312,17 @@ let app = {
                 price.setAttribute("class", "text-white");
                 price.innerHTML = fareMatrixData.data[i].price.total + "<br>";
                 linkToBook.setAttribute("class", "text-white");
-                linkToBook.innerHTML = "";
+                carrierAirline(fareMatrixData.data[i].validatingAirlineCodes[0], linkToBook);
+                // console.log("airlineBookingURL")
+                // console.log(airlineBookingURL)
+                // linkToBook.innerHTML = `<a href="https://${airlineBookingURL}.com" target="_blank"><button class="btn btn-outline-success my-2 my-sm-0 text-light">Book Ticket</button></a>`
             }
-
+    
 
         }
 
     },
+
 
 
     convertCurrency: () => {
@@ -369,11 +400,13 @@ function modeSwitcher(){
 
 
     },
+
     clearHistory: () => {
         console.log("Cleared Application LocalStorage");
         localStorage.clear();
+        let tableRows = document.getElementById('table-fareMatrix').rows.length;
         for (let y = 1; y < document.getElementById('table-fareMatrix').rows.length; y++) {
-            console.log(document.getElementById('table-fareMatrix').rows.length);
+            console.log();
             document.getElementById("table-fareMatrix").deleteRow(1);
         }
     },
@@ -394,16 +427,6 @@ function modeSwitcher(){
                 document.getElementById("notification-container").setAttribute("role", "alert");
                 break;
         }
-
-
-        // <strong>Development Mode!</strong> Token Keys only active for 30 minutes.
-        // < button type = "button" class="close" data - dismiss="alert" aria - label="Close" >
-        //     <span aria-hidden="true">&times;</span>
-        // </ >
-
-
-
-
     },
     modeSwitcher: () => {
         if (modeBtn.value === "darkMode") {
