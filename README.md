@@ -1,6 +1,9 @@
 # FlytCheckr
 
 ## Description
+ FlyteCheckr is your newest tool to help you find that special getaway.
+ You can enter a location or use your geoLocation to find airports nearby, from there you will see a list of destinations your origin services
+ Once you select your date you will be presented with the fare matrix and a link to book your trip.
  
 
 ## Installation
@@ -10,17 +13,24 @@ Follow these steps to install this project on your local machine.
 - Open Bash editor
 - mkdir 
 - cd 
-- git clone https://
+- git clone https://github.com/DLittlefield81/FlytCheckr
 
 ## Application
 
-Link to Deployed Application: https://
+Link to Deployed Application: https://dlittlefield81.github.io/FlytCheckr/
 
 
 ![FytCheckr](assets/images/screenshot.png)
 ![Wireframe](assets/images/wireframe.png)
 
-
+## Libraries Used
+ - Amadeus API
+ - IATA API through RapidAPI
+ - Moment JS
+ - Bootstrap CSS
+ - Poper CSS
+ - Google Fonts
+ 
 ## License
 
 Non-Software Licenses
